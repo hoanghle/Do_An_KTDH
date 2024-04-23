@@ -1,5 +1,6 @@
 from tkinter import *
 import GUI
+import math as m
 
 class Graphics2D(GUI.Application):
     def __init__(self, root):
@@ -41,7 +42,7 @@ class Graphics2D(GUI.Application):
                     p += f1
                     x += x_step
                 self.put_pixel(x,y)
-
+        
     def draw_circle(self, x_center, y_center, radius):
         x = radius
         y = 0
@@ -72,6 +73,52 @@ class Graphics2D(GUI.Application):
         for point in points:
             self.put_pixel(point[0], point[1])
 
+###########################################################
+    def draw_elip(self, x_center, y_center, a, b):
+        #self.put_pixel()
+        x = 0
+        y = b
+        #a2=a*a
+        #b2=b*b
+        fx=0
+        fy=2*a*a*y
+
+        self.put_pixel(x_center+x, y_center+y)
+        self.put_pixel(x_center-x, y_center+y)
+        self.put_pixel(x_center+x, y_center-y)
+        self.put_pixel(x_center-x, y_center-y)
+        
+        p=b*b-a*a*b-a*a/4
+        midb=round(m.pow(a,2)/m.sqrt(m.pow(a,2)+m.pow(b,2)))
+        
+        while fx<fy: #nửa đầu
+            x+=1
+            fx+=2*b*b
+            if (p<0):
+                p += b*b*(2*x+3)
+            else:
+                y -= 1
+                p += b*b*(2*x+3)+a*a*(-2*y+2)
+                fy -= 2*a*a
+            self.put_pixel(x_center+x, y_center+y)
+            self.put_pixel(x_center-x, y_center+y)
+            self.put_pixel(x_center+x, y_center-y)
+            self.put_pixel(x_center-x, y_center-y)
+
+        while y>0:
+            y -= 1
+            fy -= 2*a*a
+            if p >= 0:
+                p += a*a*(3-2*y)
+            else:
+                x +=1
+                fx += 2*b*b
+                p += b*b*(2*x+2)+a*a*(-2*y+3)
+            self.put_pixel(x_center+x, y_center+y)
+            self.put_pixel(x_center-x, y_center+y)
+            self.put_pixel(x_center+x, y_center-y)
+            self.put_pixel(x_center-x, y_center-y)
+            
     def draw_rectangle(self, x1, y1, x2, y2):
         self.draw_line(x1, y1, x2, y1)
         self.draw_line(x2, y1, x2, y2)
@@ -105,4 +152,6 @@ class Graphics2D(GUI.Application):
         self.draw_line( x1, y1, x2, y2)  # Cạnh đáy
         self.draw_line(x2, y2, x3, y3)  # Cạnh kề
         self.draw_line(x3, y3, x1, y1)  # Cạnh huyền
+    
+    
         
